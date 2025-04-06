@@ -164,7 +164,7 @@ export function CustomerInfoForm() {
                   />
                   <div className="flex-1">
                     <Label htmlFor={`addon-${addon.id}`} className="font-medium cursor-pointer">
-                      {addon.name} - Rp {addon.price.toLocaleString()}/day
+                      {addon.name} - Rp {addon.price.toLocaleString('id-ID')}/day
                     </Label>
                     <p className="text-sm text-muted-foreground">{addon.description}</p>
                   </div>

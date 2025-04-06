@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { format } from "date-fns"
+import { format, differenceInDays } from "date-fns"
 import { useBookingStore } from "@/store/booking-store"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { Motorcycle } from "@/types/booking/booking-types"
@@ -105,8 +105,7 @@ export function BookingSummary() {
   // Calculate rental days
   const rentalDays =
     dateRange.from && dateRange.to
-      ? Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24)) + 1
-      : 0
+      ? differenceInDays(dateRange.to, dateRange.from) : 0
 
   return (
     <Card className="sticky top-24">
@@ -185,7 +184,7 @@ export function BookingSummary() {
               <div className="flex justify-between text-sm">
                 <span>Base Rate:</span>
                 <span>
-                  Rp {selectedMotorcycle.price.toLocaleString()} x {rentalDays} {rentalDays === 1 ? "day" : "days"}
+                  Rp {selectedMotorcycle.price.toLocaleString('id-ID')} x {rentalDays} {rentalDays === 1 ? "day" : "days"}
                 </span>
               </div>
             )}
@@ -194,7 +193,7 @@ export function BookingSummary() {
 
             <div className="flex justify-between font-medium text-lg pt-2 border-t mt-2">
               <span>Total:</span>
-              <span>Rp {totalPrice.toLocaleString()}</span>
+              <span>Rp {totalPrice.toLocaleString('id-ID')}</span>
             </div>
           </div>
         </div>

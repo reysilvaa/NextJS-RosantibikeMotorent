@@ -323,7 +323,7 @@ export default function AdminDashboardPage() {
                           {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                         </Badge>
                       </div>
-                      <div className="col-span-2">Rp {booking.totalPrice.toLocaleString()}</div>
+                      <div className="col-span-2">Rp {booking.totalPrice.toLocaleString('id-ID')}</div>
                       <div className="col-span-1 text-right">
                         <Button variant="ghost" size="sm">
                           View

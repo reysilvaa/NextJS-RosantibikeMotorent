@@ -41,9 +41,9 @@ export function AvailabilityFilter() {
             <AccordionContent>
               <div className="space-y-4">
                 <Slider value={priceRange} min={50000} max={1000000} step={50000} onValueChange={setPriceRange} />
-                <div className="flex items-center justify-between text-sm">
-                  <span>Rp {priceRange[0].toLocaleString()}</span>
-                  <span>Rp {priceRange[1].toLocaleString()}</span>
+                <div className="flex justify-between text-xs mt-1">
+                  <span>Rp {priceRange[0].toLocaleString('id-ID')}</span>
+                  <span>Rp {priceRange[1].toLocaleString('id-ID')}</span>
                 </div>
               </div>
             </AccordionContent>

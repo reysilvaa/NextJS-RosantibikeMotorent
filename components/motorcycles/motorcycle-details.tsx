@@ -52,7 +52,7 @@ export function MotorcycleDetails({ motorcycle }: MotorcycleDetailsProps) {
       </div>
       <div className="mt-6">
         <p className="text-sm text-muted-foreground">Rental Price</p>
-        <p className="text-2xl font-bold">Rp {motorcycle.price.toLocaleString()} / day</p>
+        <p className="text-2xl font-bold">Rp {motorcycle.price.toLocaleString('id-ID')} / day</p>
       </div>
     </motion.div>
   )

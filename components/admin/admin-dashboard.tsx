@@ -301,7 +301,7 @@ export function AdminDashboard() {
                       >
                         {booking.status}
                       </Badge>
-                      <p className="font-medium">Rp {booking.total.toLocaleString()}</p>
+                      <p className="font-medium">Rp {booking.total.toLocaleString('id-ID')}</p>
                       <Button variant="ghost" size="sm">
                         View
                       </Button>

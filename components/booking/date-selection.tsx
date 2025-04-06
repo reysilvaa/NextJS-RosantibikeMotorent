@@ -95,8 +95,11 @@ export function DateSelection() {
           mode="range"
           selected={dateRange}
           onSelect={(range: DateRange | undefined) => {
-            if (range?.from && range?.to) {
-              setDateRange(range as any);
+            if (range) {
+              setDateRange({
+                from: range.from,
+                to: range.to
+              });
             }
           }}
           numberOfMonths={2}
@@ -110,7 +113,7 @@ export function DateSelection() {
             {dateRange.from && dateRange.to ? (
               <>
                 Selected period: {format(dateRange.from, "PPP")} - {format(dateRange.to, "PPP")} (
-                {Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24)) + 1} days)
+                {Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))} days)
               </>
             ) : (
               "Please select a date range for your rental"

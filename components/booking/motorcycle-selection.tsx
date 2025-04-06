@@ -243,12 +243,12 @@ export function MotorcycleSelection() {
                       {motorcycle.discountedPrice ? (
                         <>
                           <p className="text-sm line-through text-muted-foreground">
-                            Rp {motorcycle.price.toLocaleString()}
+                            Rp {motorcycle.price.toLocaleString('id-ID')}
                           </p>
-                          <p className="font-semibold text-red-500">Rp {motorcycle.discountedPrice.toLocaleString()}</p>
+                          <p className="font-semibold text-red-500">Rp {motorcycle.discountedPrice.toLocaleString('id-ID')}</p>
                         </>
                       ) : (
-                        <p className="font-semibold">Rp {motorcycle.price.toLocaleString()}</p>
+                        <p className="font-semibold">Rp {motorcycle.price.toLocaleString('id-ID')}</p>
                       )}
                       <p className="text-xs text-muted-foreground">/day</p>
                     </div>
