@@ -19,16 +19,22 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <HeroSection />
-      <div className="container -mt-16 relative z-10">
-        <QuickBookingForm />
+      <div className="relative z-10">
+        <div className="container -mt-28 mb-20">
+          <div className="shadow-xl rounded-xl overflow-hidden">
+            <QuickBookingForm />
+          </div>
+        </div>
+        <div className="pt-4">
+          <MotorcycleShowcase />
+          <BenefitsSection />
+          <RentalProcess />
+          <TourismGallery />
+          <CustomerGallery />
+          <TestimonialsSection />
+          <CtaSection />
+        </div>
       </div>
-      <MotorcycleShowcase />
-      <BenefitsSection />
-      <RentalProcess />
-      <TourismGallery />
-      <CustomerGallery />
-      <TestimonialsSection />
-      <CtaSection />
     </div>
   )
 }

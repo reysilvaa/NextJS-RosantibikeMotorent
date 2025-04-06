@@ -9,9 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
-import { CalendarIcon, Search } from "lucide-react"
+import { CalendarIcon, Search, Bike, MapPin } from "lucide-react"
 import type { DateRange } from "@/types/booking/booking-types"
 import { DateRange as ReactDayPickerDateRange } from "react-day-picker"
+import { cn } from "@/lib/utils"
 
 export function QuickBookingForm() {
   const router = useRouter()
@@ -32,17 +33,20 @@ export function QuickBookingForm() {
   }
 
   return (
-    <Card className="shadow-lg border-0">
-      <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
-        <CardTitle className="text-center">Quick Booking</CardTitle>
+    <Card className="shadow-xl border-0 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+      <CardHeader className="bg-primary text-primary-foreground p-5">
+        <CardTitle className="text-center text-xl">Mulai Petualangan Anda</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Motorcycle Type</label>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-medium">
+              <Bike className="h-4 w-4 text-primary" />
+              Tipe Motor
+            </label>
             <Select value={motorcycleType} onValueChange={setMotorcycleType}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select type" />
+              <SelectTrigger className="bg-background/70 backdrop-blur">
+                <SelectValue placeholder="Pilih tipe" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Scooter">Scooter</SelectItem>
@@ -53,11 +57,14 @@ export function QuickBookingForm() {
             </Select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Location</label>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-medium">
+              <MapPin className="h-4 w-4 text-primary" />
+              Lokasi
+            </label>
             <Select value={location} onValueChange={setLocation}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select location" />
+              <SelectTrigger className="bg-background/70 backdrop-blur">
+                <SelectValue placeholder="Pilih lokasi" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="1">Malang City Office</SelectItem>
@@ -68,22 +75,30 @@ export function QuickBookingForm() {
             </Select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Dates</label>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-medium">
+              <CalendarIcon className="h-4 w-4 text-primary" />
+              Tanggal
+            </label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start text-left font-normal">
-                  <CalendarIcon className="mr-2 h-4 w-4" />
+                <Button 
+                  variant="outline" 
+                  className={cn(
+                    "w-full justify-start text-left font-normal bg-background/70 backdrop-blur",
+                    !dateRange.from && "text-muted-foreground"
+                  )}
+                >
                   {dateRange.from ? (
                     dateRange.to ? (
                       <>
-                        {format(dateRange.from, "MMM d")} - {format(dateRange.to, "MMM d")}
+                        {format(dateRange.from, "d MMM")} - {format(dateRange.to, "d MMM")}
                       </>
                     ) : (
-                      format(dateRange.from, "MMM d")
+                      format(dateRange.from, "d MMM")
                     )
                   ) : (
-                    <span>Pick dates</span>
+                    <span>Pilih tanggal</span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -91,7 +106,7 @@ export function QuickBookingForm() {
                 <Calendar
                   mode="range"
                   selected={dateRange}
-                  onSelect={(range: ReactDayPickerDateRange | undefined) => setDateRange(range)}
+                  onSelect={(range: ReactDayPickerDateRange | undefined) => setDateRange(range || { from: undefined, to: undefined })}
                   disabled={{ before: new Date() }}
                   initialFocus
                 />
@@ -101,12 +116,12 @@ export function QuickBookingForm() {
 
           <div className="flex items-end">
             <Button
-              className="w-full gap-2"
+              className="w-full gap-2 h-10 text-base"
               onClick={handleSearch}
               disabled={!motorcycleType || !location || !dateRange.from || !dateRange.to}
             >
               <Search className="h-4 w-4" />
-              Search
+              Cari
             </Button>
           </div>
         </div>
