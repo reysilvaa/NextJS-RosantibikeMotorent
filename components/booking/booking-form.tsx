@@ -74,7 +74,8 @@ export function BookingForm() {
   // Recalculate price when component mounts
   useEffect(() => {
     calculateTotalPrice()
-  }, [calculateTotalPrice])
+    console.log("Booking form loaded with date range:", dateRange);
+  }, [calculateTotalPrice, dateRange])
 
   const handleNextStep = () => {
     setStep(currentStep + 1)

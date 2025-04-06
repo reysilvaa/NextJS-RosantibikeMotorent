@@ -40,7 +40,7 @@ export default async function MotorcycleDetailPage({ params }: { params: { slug:
   }
 
   return (
-    <div className="container py-8 md:py-12">
+    <div className="container py-16 md:py-24">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <MotorcycleGallery images={motorcycle.images} name={motorcycle.name} />
         <div className="flex flex-col gap-8">
@@ -49,7 +49,7 @@ export default async function MotorcycleDetailPage({ params }: { params: { slug:
           <MotorcycleBookingCta motorcycle={motorcycle} />
         </div>
       </div>
-      <div className="mt-12">
+      <div className="mt-24">
         <MotorcycleSpecifications specifications={motorcycle.specifications} />
       </div>
     </div>

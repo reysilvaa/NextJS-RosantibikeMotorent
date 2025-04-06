@@ -176,6 +176,30 @@ export const useBookingStore = create<BookingState>()(
         customerInfo: state.customerInfo,
         promoCode: state.promoCode,
       }),
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          if (!str) return null;
+          
+          const parsed = JSON.parse(str, (key, value) => {
+            if (key === 'from' || key === 'to') {
+              return value ? new Date(value) : undefined;
+            }
+            return value;
+          });
+          
+          return parsed;
+        },
+        setItem: (name, value) => {
+          localStorage.setItem(name, JSON.stringify(value, (key, value) => {
+            if (value instanceof Date) {
+              return value.toISOString();
+            }
+            return value;
+          }));
+        },
+        removeItem: (name) => localStorage.removeItem(name),
+      },
     },
   ),
 )

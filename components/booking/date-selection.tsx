@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { format, isSameDay, differenceInDays } from "date-fns"
 import { useBookingStore } from "@/store/booking-store"
 import { Calendar } from "@/components/ui/calendar"
@@ -77,6 +77,13 @@ export function DateSelection() {
     }
   }, [sameLocation, selectedLocation, setPickupLocation, setReturnLocation])
 
+  // Sinkronisasi nilai location berdasarkan nilai yang ada di store
+  useEffect(() => {
+    if (pickupLocation && (!selectedLocation || sameLocation)) {
+      setSelectedLocation(pickupLocation);
+    }
+  }, [pickupLocation, selectedLocation, sameLocation]);
+
   // Check if a date is unavailable
   const isDateUnavailable = (date: Date) => {
     return unavailableDates.some((unavailableDate) => isSameDay(date, unavailableDate))
@@ -86,6 +93,23 @@ export function DateSelection() {
   const getLocationById = (id: string) => {
     return sampleLocations.find((location) => location.id === id)
   }
+  
+  // Menggunakan React.useCallback untuk mencegah re-render yang berlebihan
+  const handleDateSelect = useCallback((range: DateRange | undefined) => {
+    if (range) {
+      // Pastikan nilai tanggal disimpan dengan benar
+      console.log("Setting date range:", range);
+      setDateRange({
+        from: range.from,
+        to: range.to
+      });
+    }
+  }, [setDateRange]);
+
+  // Debugging untuk melihat nilai tanggal yang dibaca dari store
+  useEffect(() => {
+    console.log("DateRange from store:", dateRange);
+  }, [dateRange]);
 
   return (
     <div className="space-y-6">
@@ -94,14 +118,7 @@ export function DateSelection() {
         <Calendar
           mode="range"
           selected={dateRange}
-          onSelect={(range: DateRange | undefined) => {
-            if (range) {
-              setDateRange({
-                from: range.from,
-                to: range.to
-              });
-            }
-          }}
+          onSelect={handleDateSelect}
           numberOfMonths={2}
           disabled={[{ before: new Date() }, isDateUnavailable]}
           className="rounded-md border"

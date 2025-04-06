@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useLanguage } from "@/components/ui/theme/language-provider"
+import { useBookingStore } from "@/store/booking-store"
+import { useRouter } from "next/navigation"
 
 interface Motorcycle {
   id: string
@@ -17,6 +19,16 @@ interface MotorcycleBookingCtaProps {
 
 export function MotorcycleBookingCta({ motorcycle }: MotorcycleBookingCtaProps) {
   const { t } = useLanguage()
+  const router = useRouter()
+  const { setMotorcycle, dateRange } = useBookingStore()
+
+  const handleBookClick = () => {
+    // Simpan ID motor yang dipilih ke store
+    setMotorcycle(motorcycle.id)
+    
+    // Arahkan ke halaman booking
+    router.push('/booking')
+  }
 
   return (
     <motion.div
@@ -25,11 +37,11 @@ export function MotorcycleBookingCta({ motorcycle }: MotorcycleBookingCtaProps) 
       transition={{ duration: 0.5, delay: 0.2 }}
       className="flex flex-col gap-4"
     >
-      <Button size="lg" asChild>
-        <Link href={`/booking?motorcycle=${motorcycle.id}`}>{t("hero.cta")}</Link>
+      <Button size="lg" onClick={handleBookClick}>
+        Pesan Sekarang
       </Button>
       <Button variant="outline" size="lg">
-        Contact Us
+        Hubungi Kami
       </Button>
     </motion.div>
   )

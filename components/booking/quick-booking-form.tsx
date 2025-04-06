@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useBookingStore } from "@/store/booking-store"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,17 +16,31 @@ import { cn } from "@/lib/utils"
 
 export function QuickBookingForm() {
   const router = useRouter()
-  const { quickBook } = useBookingStore()
+  const { quickBook, dateRange: storeDateRange, setDateRange } = useBookingStore()
 
   const [motorcycleType, setMotorcycleType] = useState("")
   const [location, setLocation] = useState("")
-  const [dateRange, setDateRange] = useState<CustomDateRange>({
+  const [dateRange, setDateRangeState] = useState<CustomDateRange>({
     from: undefined,
     to: undefined,
   })
 
+  useEffect(() => {
+    if (storeDateRange.from || storeDateRange.to) {
+      setDateRangeState({
+        from: storeDateRange.from || undefined,
+        to: storeDateRange.to || undefined,
+      });
+    }
+  }, []);
+
   const handleSearch = () => {
     if (motorcycleType && location && dateRange.from && dateRange.to) {
+      setDateRange({
+        from: dateRange.from,
+        to: dateRange.to
+      });
+      
       quickBook(motorcycleType, dateRange.from, dateRange.to, location)
       router.push("/booking")
     }
@@ -107,11 +121,13 @@ export function QuickBookingForm() {
                   mode="range"
                   selected={dateRange}
                   onSelect={(range: ReactDayPickerDateRange | undefined) => {
-                    const newDateRange: CustomDateRange = {
-                      from: range?.from,
-                      to: range?.to,
-                    };
-                    setDateRange(newDateRange);
+                    if (range) {
+                      const newDateRange: CustomDateRange = {
+                        from: range.from,
+                        to: range.to,
+                      };
+                      setDateRangeState(newDateRange);
+                    }
                   }}
                   disabled={{ before: new Date() }}
                   initialFocus
