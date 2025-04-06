@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 
 export default function BookingPage() {
   return (
-    <div className="container py-8 md:py-12">
+    <div className="container py-16 md:py-24">
       <PageHeader
         title="Book Your Motorcycle"
         description="Complete your booking with our easy step-by-step process."
       />
-      <div className="mt-8">
+      <div className="mt-12">
         <BookingForm />
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { format, isSameDay } from "date-fns"
+import { format, isSameDay, differenceInDays } from "date-fns"
 import { useBookingStore } from "@/store/booking-store"
 import { Calendar } from "@/components/ui/calendar"
 import { Label } from "@/components/ui/label"
@@ -113,7 +113,7 @@ export function DateSelection() {
             {dateRange.from && dateRange.to ? (
               <>
                 Selected period: {format(dateRange.from, "PPP")} - {format(dateRange.to, "PPP")} (
-                {Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24))} days)
+                {differenceInDays(dateRange.to, dateRange.from)} days)
               </>
             ) : (
               "Please select a date range for your rental"

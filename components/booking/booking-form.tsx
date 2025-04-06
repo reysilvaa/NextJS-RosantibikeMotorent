@@ -14,11 +14,50 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { useToast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import type { AddOn } from "@/types/booking/booking-types"
+
+// Sample add-ons - in a real app, this would come from an API
+const sampleAddOns: AddOn[] = [
+  {
+    id: "1",
+    name: "Helmet",
+    description: "High-quality full-face helmet",
+    price: 25000,
+    selected: false,
+  },
+  {
+    id: "2",
+    name: "Rain Gear",
+    description: "Waterproof jacket and pants",
+    price: 35000,
+    selected: false,
+  },
+  {
+    id: "3",
+    name: "Phone Mount",
+    description: "Secure phone holder for navigation",
+    price: 15000,
+    selected: false,
+  },
+  {
+    id: "4",
+    name: "Insurance Premium",
+    description: "Enhanced coverage with zero deductible",
+    price: 50000,
+    selected: false,
+  },
+]
 
 export function BookingForm() {
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
+  const [addOns, setAddOns] = useState<AddOn[]>(sampleAddOns)
+  const [promoCode, setPromoCode] = useState("")
+  const [promoApplied, setPromoApplied] = useState(false)
 
   const {
     currentStep,
@@ -71,14 +110,28 @@ export function BookingForm() {
     }
   }
 
+  const toggleAddOn = (id: string) => {
+    setAddOns((prev) => prev.map((addon) => (addon.id === id ? { ...addon, selected: !addon.selected } : addon)))
+  }
+
+  const applyPromoCode = () => {
+    // In a real app, this would validate the promo code with an API
+    if (promoCode === "DISCOUNT10") {
+      setPromoApplied(true)
+    } else {
+      setPromoApplied(false)
+    }
+  }
+
   const canProceedToStep2 = !!motorcycleId
   const canProceedToStep3 = !!dateRange.from && !!dateRange.to && !!pickupLocation && !!returnLocation
-  const canSubmit =
+  const canProceedToStep4 =
     !!customerInfo.firstName &&
     !!customerInfo.lastName &&
     !!customerInfo.email &&
     !!customerInfo.phone &&
     !!customerInfo.licenseNumber
+  const canSubmit = true // We can always submit from the add-ons page
 
   if (isComplete) {
     return (
@@ -129,14 +182,30 @@ export function BookingForm() {
           >
             3
           </div>
+          <div className="h-1 flex-1 bg-muted mx-2">
+            <div
+              className="h-full bg-primary transition-all"
+              style={{ width: `${currentStep > 3 ? "100%" : "0%"}` }}
+            ></div>
+          </div>
+          <div
+            className={`flex h-10 w-10 items-center justify-center rounded-full ${
+              currentStep >= 4 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+            }`}
+          >
+            4
+          </div>
         </div>
-        <div className="mt-4 flex justify-between text-sm">
+        <div className="mt-4 flex justify-between text-xs md:text-sm">
           <span className={currentStep >= 1 ? "text-primary font-medium" : "text-muted-foreground"}>
-            Select Motorcycle
+            Pilih Motor
           </span>
-          <span className={currentStep >= 2 ? "text-primary font-medium" : "text-muted-foreground"}>Choose Dates</span>
+          <span className={currentStep >= 2 ? "text-primary font-medium" : "text-muted-foreground"}>Pilih Tanggal</span>
           <span className={currentStep >= 3 ? "text-primary font-medium" : "text-muted-foreground"}>
-            Personal Information
+            Informasi Pribadi
+          </span>
+          <span className={currentStep >= 4 ? "text-primary font-medium" : "text-muted-foreground"}>
+            Extras & Add-ons
           </span>
         </div>
       </div>
@@ -153,15 +222,15 @@ export function BookingForm() {
               >
                 <Card>
                   <CardHeader>
-                    <CardTitle>Select Motorcycle</CardTitle>
-                    <CardDescription>Choose your preferred motorcycle for your adventure</CardDescription>
+                    <CardTitle>Pilih Motor</CardTitle>
+                    <CardDescription>Pilih motor yang sesuai untuk petualangan Anda</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <MotorcycleSelection />
                   </CardContent>
                   <div className="p-6 pt-0 flex justify-end">
                     <Button type="button" onClick={handleNextStep} disabled={!canProceedToStep2}>
-                      Continue to Dates
+                      Lanjut ke Tanggal
                     </Button>
                   </div>
                 </Card>
@@ -177,18 +246,18 @@ export function BookingForm() {
               >
                 <Card>
                   <CardHeader>
-                    <CardTitle>Choose Dates</CardTitle>
-                    <CardDescription>Select your pickup and return dates and locations</CardDescription>
+                    <CardTitle>Pilih Tanggal</CardTitle>
+                    <CardDescription>Pilih tanggal dan lokasi pengambilan dan pengembalian</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <DateSelection />
                   </CardContent>
                   <div className="p-6 pt-0 flex justify-between">
                     <Button type="button" variant="outline" onClick={handlePrevStep}>
-                      Back
+                      Kembali
                     </Button>
                     <Button type="button" onClick={handleNextStep} disabled={!canProceedToStep3}>
-                      Continue to Personal Info
+                      Lanjut ke Info Pribadi
                     </Button>
                   </div>
                 </Card>
@@ -204,24 +273,94 @@ export function BookingForm() {
               >
                 <Card>
                   <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
-                    <CardDescription>Please provide your contact details to complete the booking</CardDescription>
+                    <CardTitle>Informasi Pribadi</CardTitle>
+                    <CardDescription>Mohon berikan detail kontak Anda untuk menyelesaikan booking</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <CustomerInfoForm />
                   </CardContent>
                   <div className="p-6 pt-0 flex justify-between">
                     <Button type="button" variant="outline" onClick={handlePrevStep}>
-                      Back
+                      Kembali
                     </Button>
-                    <Button type="submit" disabled={!canSubmit || isSubmitting}>
+                    <Button type="button" onClick={handleNextStep} disabled={!canProceedToStep4}>
+                      Lanjut ke Add-ons
+                    </Button>
+                  </div>
+                </Card>
+              </motion.div>
+            )}
+
+            {currentStep === 4 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Extras & Add-ons</CardTitle>
+                    <CardDescription>Pilih perlengkapan tambahan untuk perjalanan Anda</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <h3 className="font-medium">Available Add-ons</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {addOns.map((addon) => (
+                            <div key={addon.id} className="flex items-start space-x-3 border rounded-lg p-3">
+                              <Checkbox
+                                id={`addon-${addon.id}`}
+                                checked={addon.selected}
+                                onCheckedChange={() => toggleAddOn(addon.id)}
+                              />
+                              <div className="flex-1">
+                                <Label htmlFor={`addon-${addon.id}`} className="font-medium cursor-pointer">
+                                  {addon.name} - Rp {addon.price.toLocaleString('id-ID')}/hari
+                                </Label>
+                                <p className="text-sm text-muted-foreground">{addon.description}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 pt-4 border-t">
+                        <Label htmlFor="promoCode">Kode Promo</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="promoCode"
+                            value={promoCode}
+                            onChange={(e) => setPromoCode(e.target.value)}
+                            placeholder="Masukkan kode promo"
+                            className="flex-1"
+                          />
+                          <button
+                            type="button"
+                            onClick={applyPromoCode}
+                            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+                          >
+                            Terapkan
+                          </button>
+                        </div>
+                        {promoApplied && <p className="text-sm text-green-600">Kode promo diterapkan! Diskon 10%.</p>}
+                        {promoCode && !promoApplied && <p className="text-sm text-red-500">Kode promo tidak valid.</p>}
+                      </div>
+                    </div>
+                  </CardContent>
+                  <div className="p-6 pt-0 flex justify-between">
+                    <Button type="button" variant="outline" onClick={handlePrevStep}>
+                      Kembali
+                    </Button>
+                    <Button type="submit" disabled={isSubmitting}>
                       {isSubmitting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Processing...
+                          Memproses...
                         </>
                       ) : (
-                        "Complete Booking"
+                        "Selesaikan Booking"
                       )}
                     </Button>
                   </div>

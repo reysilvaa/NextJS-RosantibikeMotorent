@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 
 export default function MotorcyclesPage() {
   return (
-    <div className="container py-8 md:py-12">
+    <div className="container py-16 md:py-24">
       <PageHeader
         title="Our Motorcycle Collection"
         description="Browse our extensive collection of premium motorcycles available for rent in Indonesia."
       />
-      <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-4">
+      <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-4">
         <div className="lg:col-span-1">
           <MotorcycleFilters />
         </div>

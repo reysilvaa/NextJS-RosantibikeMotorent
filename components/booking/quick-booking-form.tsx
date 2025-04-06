@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { CalendarIcon, Search, Bike, MapPin } from "lucide-react"
-import type { DateRange } from "@/types/booking/booking-types"
+import type { DateRange as CustomDateRange } from "@/types/booking/booking-types"
 import { DateRange as ReactDayPickerDateRange } from "react-day-picker"
 import { cn } from "@/lib/utils"
 
@@ -20,7 +20,7 @@ export function QuickBookingForm() {
 
   const [motorcycleType, setMotorcycleType] = useState("")
   const [location, setLocation] = useState("")
-  const [dateRange, setDateRange] = useState<DateRange>({
+  const [dateRange, setDateRange] = useState<CustomDateRange>({
     from: undefined,
     to: undefined,
   })
@@ -106,7 +106,13 @@ export function QuickBookingForm() {
                 <Calendar
                   mode="range"
                   selected={dateRange}
-                  onSelect={(range: ReactDayPickerDateRange | undefined) => setDateRange(range || { from: undefined, to: undefined })}
+                  onSelect={(range: ReactDayPickerDateRange | undefined) => {
+                    const newDateRange: CustomDateRange = {
+                      from: range?.from,
+                      to: range?.to,
+                    };
+                    setDateRange(newDateRange);
+                  }}
                   disabled={{ before: new Date() }}
                   initialFocus
                 />

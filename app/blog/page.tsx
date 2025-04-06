@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   return (
-    <div className="container py-8 md:py-12">
+    <div className="container py-16 md:py-24">
       <PageHeader
         title="Motorcycle Blog"
         description="Read our latest articles about motorcycles, riding tips, and travel destinations in Indonesia."
       />
-      <div className="mt-8">
+      <div className="mt-12">
         <BlogGrid />
       </div>
     </div>
